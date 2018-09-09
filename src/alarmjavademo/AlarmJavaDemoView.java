@@ -28,6 +28,8 @@ import java.nio.ByteBuffer;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -612,8 +614,46 @@ public class AlarmJavaDemoView extends FrameView {
                     break;
             }
             
+            
+//        String[] newRow1 = new String[3];
+//        newRow1[0] = "12";
+//        newRow1[1] = "11";
+//        newRow1[2] = "23";
+//        alarmTableModel.insertRow(0, newRow1);
+
+            PostInfo(alarmTableModel);
 
     }
+
+    public void PostInfo(DefaultTableModel alarmTableModel){
+     String[]ret;
+     System.out.println("1111111111111111");
+     int rowcount=alarmTableModel.getRowCount();
+     if(rowcount==0){
+         return;
+     };
+     int numCols =alarmTableModel.getColumnCount();
+     List list=new ArrayList(); 
+//        System.out.println(rowcount);
+       for (int i = 0; i < rowcount; i++) {
+            ret=new String[numCols];
+            for (int j = 0; j < numCols; j++) {
+            ret[j]=(String)alarmTableModel.getValueAt(i, j);
+          }
+            list.add(ret);
+   }
+         JSONObject jsonParam = new JSONObject();
+
+     try {
+         jsonParam.put("data",list);
+
+     } catch (JSONException e) {
+         e.printStackTrace();
+     }
+
+     String url = "http://127.0.0.1:8079/qinzhou/alarmhaikang/upload.json";
+     String data = NetServerSelf.getJsonData(jsonParam, url);
+ }
 
     public class FMSGCallBack_V31 implements HCNetSDK.FMSGCallBack_V31
     {
@@ -1092,16 +1132,16 @@ public class AlarmJavaDemoView extends FrameView {
 
     @Action
     public void OneTest() {
-        System.out.println("我的天哪开始post请求");
-            JSONObject jsonParam = new JSONObject();    	
-                try{
-                    jsonParam.put("_id", "1");
-                }catch(JSONException e){
-                     e.printStackTrace();
-                }
-		String url="http://127.0.0.1:8079/qinzhou/alarmhaikang/upload.json";
-		String data=NetServerSelf.getJsonData(jsonParam,url);                            
-               System.out.print(data);
+        // System.out.println("我的天哪开始post请求");
+        //     JSONObject jsonParam = new JSONObject();    	
+        //         try{
+        //             jsonParam.put("_id", "1");
+        //         }catch(JSONException e){
+        //              e.printStackTrace();
+        //         }
+		// String url="http://127.0.0.1:8079/qinzhou/alarmhaikang/upload.json";
+		// String data=NetServerSelf.getJsonData(jsonParam,url);                            
+        //        System.out.print(data);
 //               return ;
 
         HCNetSDK.NET_DVR_SNAPCFG struSnapCfg = new HCNetSDK.NET_DVR_SNAPCFG();
